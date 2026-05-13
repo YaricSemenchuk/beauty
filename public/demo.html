@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Beauty Hours — Дизайн-демо</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbf6f1;
+    --surface: #ffffff;
+    --surface-soft: #f5ebe2;
+    --surface-sand: #efe1d2;
+    --ink: #3d2b26;
+    --ink-soft: #8c736b;
+    --ink-faint: #b8a098;
+    --accent: #d4a29c;
+    --accent-strong: #b9847d;
+    --accent-deep: #7a4b43;
+    --peach: #e8c9b9;
+    --rose: #e7b8b0;
+    --sage: #a8b89a;
+    --gold: #c9a36b;
+    --gold-soft: #e6d3a7;
+    --danger: #c97a6c;
+    --shadow: 0 6px 22px rgba(180, 140, 120, 0.10);
+    --shadow-lg: 0 24px 60px rgba(180,140,120,.24);
+    --shadow-inset: inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background:
+      radial-gradient(circle at 12% 8%, #f6dccc 0%, transparent 38%),
+      radial-gradient(circle at 90% 18%, #efd0c9 0%, transparent 42%),
+      radial-gradient(circle at 78% 92%, #e9d6c4 0%, transparent 48%),
+      radial-gradient(circle at 20% 90%, #f1dcc6 0%, transparent 40%),
+      linear-gradient(180deg, #fbf6f1 0%, #f4ebe1 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><circle cx='30' cy='30' r='1' fill='%23c9a36b' opacity='.18'/></svg>");
+    background-size: 22px 22px;
+    mix-blend-mode: multiply;
+    opacity: .35;
+  }
+  .page-header {
+    position: relative; z-index: 1;
+    padding: 64px 32px 8px;
+    text-align: center;
+  }
+  .crest {
+    display: inline-block; margin-bottom: 14px;
+    color: var(--gold);
+  }
+  .page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1;
+    margin: 0;
+    color: var(--accent-deep);
+    letter-spacing: 0.005em;
+  }
+  .page-header h1 .ital { font-style: italic; color: var(--gold); }
+  .page-header .sub {
+    color: var(--ink-soft);
+    margin-top: 14px;
+    font-size: 14px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .swatches { display: flex; justify-content: center; gap: 12px; margin-top: 28px; }
+  .sw {
+    width: 42px; height: 42px; border-radius: 50%;
+    box-shadow: var(--shadow), var(--shadow-inset);
+    position: relative;
+  }
+  .sw::after {
+    content: attr(data-name); position: absolute; bottom: -22px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px; color: var(--ink-soft); white-space: nowrap;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  .stage {
+    position: relative; z-index: 1;
+    display: flex; gap: 42px; padding: 80px 32px 60px;
+    overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .phone-wrap {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .phone {
+    width: 380px; min-height: 760px;
+    background:
+      radial-gradient(circle at 0% 0%, #f8eee3 0%, transparent 50%),
+      radial-gradient(circle at 100% 100%, #f6e6d8 0%, transparent 50%),
+      var(--bg);
+    border-radius: 44px;
+    box-shadow: var(--shadow-lg);
+    padding: 22px 18px;
+    border: 10px solid #ece0d2;
+    position: relative;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: ""; position: absolute; top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 6px; background: #d9c5b3; border-radius: 4px;
+    z-index: 5;
+  }
+  /* decorative botanical SVG bg corner */
+  .phone .deco {
+    position: absolute; pointer-events: none; opacity: .45; z-index: 0;
+  }
+  .phone .deco.tr { top: -30px; right: -40px; width: 200px; transform: rotate(20deg); }
+  .phone .deco.bl { bottom: -40px; left: -40px; width: 180px; transform: rotate(-15deg); }
+  .phone-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px; color: var(--accent-deep);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .phone-label::before, .phone-label::after {
+    content: ""; width: 30px; height: 1px; background: var(--gold);
+    opacity: .6;
+  }
+
+  .screen { padding: 24px 10px 12px; display: flex; flex-direction: column; gap: 18px; position: relative; z-index: 1; }
+
+  .card {
+    background: linear-gradient(180deg, #ffffff 0%, #fffaf5 100%);
+    border-radius: 26px;
+    box-shadow: var(--shadow), var(--shadow-inset);
+    border: 1px solid rgba(201, 163, 107, .12);
+  }
+  .card.elev { box-shadow: 0 12px 36px rgba(180,140,120,.18), var(--shadow-inset); }
+  .card.peachy {
+    background: linear-gradient(135deg, #f9e2d5 0%, #f6d5cb 60%, #efbfb6 100%);
+    color: var(--accent-deep);
+    border: 1px solid rgba(255,255,255,.5);
+  }
+  .card.cocoa {
+    background: linear-gradient(140deg, #7a4b43 0%, #5e3832 100%);
+    color: #f7eadf;
+    border: none;
+  }
+  .pad { padding: 22px; }
+  .pad-sm { padding: 10px; }
+
+  /* gold hairline divider */
+  .hairline {
+    height: 1px;
+    background: linear-gradient(to right, transparent 0%, rgba(201,163,107,.45) 30%, rgba(201,163,107,.45) 70%, transparent 100%);
+    margin: 0 14px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(180deg, #8a574e 0%, #6e4239 100%);
+    color: #fff;
+    border-radius: 999px; padding: 16px 22px;
+    font-weight: 500; font-size: 15px;
+    text-align: center; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    border: none;
+    box-shadow: 0 8px 24px rgba(122,75,67,.32), inset 0 1px 0 rgba(255,255,255,.18);
+    letter-spacing: 0.01em;
+  }
+  .btn-primary.gold {
+    background: linear-gradient(180deg, #d9b274 0%, #b88d4d 100%);
+    box-shadow: 0 8px 24px rgba(201,163,107,.36), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .btn-soft {
+    background: rgba(255,255,255,.7);
+    color: var(--accent-deep);
+    border-radius: 999px; padding: 11px 18px;
+    font-weight: 500; font-size: 14px;
+    text-align: center; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1px solid rgba(201,163,107,.25);
+    backdrop-filter: blur(6px);
+  }
+  .chip {
+    background: rgba(255,255,255,.55);
+    color: var(--accent-deep);
+    border: 1px solid rgba(201,163,107,.3);
+    border-radius: 999px; padding: 5px 12px;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.04em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chip.gold {
+    background: linear-gradient(180deg,#f4dfb5,#e6c587);
+    color: #6b4a1f; border-color: rgba(107,74,31,.2);
+  }
+  .chip.sage {
+    background: rgba(168,184,154,.22);
+    color: #5a6a4e; border-color: rgba(90,106,78,.2);
+  }
+  .chip.dot::before {
+    content:""; width:6px; height:6px; border-radius:50%; background: currentColor;
+  }
+
+  .greeting-eyebrow {
+    font-size: 11px; color: var(--ink-soft); letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .greeting-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600; font-size: 36px;
+    color: var(--accent-deep);
+    margin-top: 4px; line-height: 1.05;
+  }
+  .greeting-name .ital { font-style: italic; color: var(--gold); }
+
+  .eyebrow {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::after { content:""; flex:1; height:1px; background: linear-gradient(to right, rgba(201,163,107,.4), transparent); }
+
+  /* Ring progress */
+  .ring-wrap {
+    display: flex; align-items: center; gap: 18px;
+  }
+  .ring {
+    --val: 0.66;
+    --size: 96px;
+    width: var(--size); height: var(--size); border-radius: 50%;
+    background:
+      conic-gradient(var(--gold) calc(var(--val) * 360deg), rgba(255,255,255,.5) 0);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 4px rgba(255,255,255,.4);
+    position: relative;
+  }
+  .ring::before {
+    content: ""; position: absolute; inset: 9px;
+    border-radius: 50%; background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(201,163,107,.2), 0 4px 10px rgba(180,140,120,.12);
+  }
+  .ring .ring-val {
+    position: relative; z-index: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; color: var(--accent-deep); font-weight: 600;
+  }
+  .ring .ring-val small { font-size: 11px; color: var(--ink-soft); display:block; font-family:'Inter'; font-weight: 500; margin-top: -3px; letter-spacing: 0.08em; }
+
+  .hero-stat {
+    flex: 1;
+  }
+  .hero-stat .big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 44px; font-weight: 600; line-height: 1;
+    color: var(--accent-deep);
+  }
+  .hero-stat .big .ital { font-style: italic; color: var(--gold); font-weight: 500; }
+  .hero-stat .meta { color: var(--ink-soft); font-size: 13px; margin-top: 8px; }
+
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 18px; transition: background .15s; }
+  .row:hover { background: rgba(245,235,226,.5); }
+  .row-left { display: flex; align-items: center; gap: 14px; }
+  .day {
+    width: 48px; height: 56px; border-radius: 16px;
+    background: linear-gradient(180deg,#fff,#f7ece1);
+    color: var(--accent-deep);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid rgba(201,163,107,.18);
+    box-shadow: 0 2px 6px rgba(180,140,120,.08);
+  }
+  .day .num { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; line-height: 1; margin-top: 4px; letter-spacing: 0; text-transform: none; }
+  .day.today {
+    background: linear-gradient(180deg, #8a574e, #6e4239);
+    color: #fff; border-color: rgba(255,255,255,.2);
+    box-shadow: 0 8px 18px rgba(122,75,67,.35);
+  }
+  .day.today .num { color: #f6d6b8; }
+  .day.empty {
+    background: repeating-linear-gradient(45deg, transparent 0 4px, rgba(184,160,152,.12) 4px 8px), #fbf5ee;
+    color: var(--ink-faint);
+  }
+  .row-times { font-size: 14px; color: var(--ink); display: flex; flex-direction: column; gap: 2px; }
+  .row-times .small { font-size: 11px; color: var(--ink-soft); }
+  .row-empty { color: var(--ink-faint); font-style: italic; }
+  .row-hours {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--accent-deep); font-weight: 600;
+    display: flex; align-items: baseline; gap: 3px;
+  }
+  .row-hours small { font-size: 11px; font-family: 'Inter'; color: var(--ink-soft); font-weight: 500; }
+
+  .header-row { display: flex; align-items: center; gap: 12px; }
+  .back {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(201,163,107,.25);
+    color: var(--accent-deep);
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  .h-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px; color: var(--accent-deep);
+    font-weight: 600; line-height: 1;
+  }
+  .h-title .ital { font-style: italic; color: var(--gold); }
+
+  .input {
+    background: #fff;
+    border: 1px solid rgba(201,163,107,.25);
+    border-radius: 16px;
+    padding: 14px 16px; width: 100%; color: var(--ink); font-size: 15px;
+    font-family: inherit;
+    box-shadow: var(--shadow-inset);
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-label {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--ink-soft); margin-bottom: 6px; display: block;
+  }
+
+  .seg {
+    display: flex; background: rgba(255,255,255,.6); padding: 5px;
+    border-radius: 22px; border: 1px solid rgba(201,163,107,.22);
+    backdrop-filter: blur(6px);
+  }
+  .seg button {
+    flex: 1; padding: 11px 0; border: none; background: transparent;
+    border-radius: 18px; font-weight: 500; color: var(--ink-soft); cursor: pointer; font-family: inherit;
+    letter-spacing: 0.04em; font-size: 14px;
+  }
+  .seg button.active {
+    background: linear-gradient(180deg,#8a574e,#6e4239);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(122,75,67,.3);
+  }
+
+  .avatar-ring {
+    width: 52px; height: 52px; border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--gold), var(--peach));
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 100%; height: 100%; border-radius: 50%;
+    color: var(--accent-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 22px;
+    background: #fff;
+  }
+  .user-line { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 20px; }
+  .user-line:hover { background: rgba(245,235,226,.55); }
+  .user-name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .user-meta { font-size: 12px; color: var(--ink-soft); margin-top: 3px; display: flex; align-items: center; gap: 8px; }
+  .user-meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); }
+  .chev { color: var(--ink-faint); }
+
+  /* mini bar chart */
+  .barchart { display: flex; align-items: end; gap: 8px; height: 80px; padding: 8px 4px 0; }
+  .bar {
+    flex: 1; border-radius: 8px 8px 4px 4px;
+    background: linear-gradient(180deg, var(--peach), var(--accent));
+    position: relative;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+  }
+  .bar.gold { background: linear-gradient(180deg, var(--gold-soft), var(--gold)); }
+  .bar.cocoa { background: linear-gradient(180deg, var(--accent), var(--accent-strong)); }
+  .bar.faint { background: rgba(232,201,185,.4); }
+  .bar-label { font-size: 9px; color: var(--ink-soft); text-align: center; margin-top: 4px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .ornament {
+    text-align: center;
+    margin: 6px 0 -4px;
+    color: var(--gold);
+    opacity: .7;
+  }
+
+  .footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 50px 20px 60px; color: var(--ink-soft); font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+  .footer .accent { color: var(--accent-deep); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 16px; }
+
+  /* sparkline */
+  .spark { display: block; width: 100%; height: 56px; }
+
+  svg.icon { display: inline-block; vertical-align: middle; }
+  .stack { display: flex; flex-direction: column; gap: 2px; }
+</style>
+</head>
+<body>
+
+<!-- =============== HEADER =============== -->
+<div class="page-header">
+  <div class="crest">
+    <svg width="64" height="32" viewBox="0 0 64 32" fill="none">
+      <path d="M2 16 H26" stroke="currentColor" stroke-width="1" />
+      <path d="M38 16 H62" stroke="currentColor" stroke-width="1" />
+      <path d="M32 4 C28 10, 28 14, 32 16 C36 14, 36 10, 32 4 Z" fill="currentColor" opacity=".5"/>
+      <path d="M32 16 C28 22, 28 26, 32 28 C36 26, 36 22, 32 16 Z" fill="currentColor" opacity=".5"/>
+      <circle cx="32" cy="16" r="2" fill="currentColor"/>
+    </svg>
+  </div>
+  <h1>Beauty <span class="ital">Hours</span></h1>
+  <div class="sub">— Дизайн-демо · 5 экранов —</div>
+  <div class="swatches">
+    <div class="sw" style="background:#fbf6f1" data-name="Cream"></div>
+    <div class="sw" style="background:#f5ebe2" data-name="Sand"></div>
+    <div class="sw" style="background:#e8c9b9" data-name="Peach"></div>
+    <div class="sw" style="background:#d4a29c" data-name="Rose"></div>
+    <div class="sw" style="background:#c9a36b" data-name="Gold"></div>
+    <div class="sw" style="background:#7a4b43" data-name="Cocoa"></div>
+    <div class="sw" style="background:#a8b89a" data-name="Sage"></div>
+  </div>
+</div>
+
+<!-- =============== STAGE =============== -->
+<div class="stage">
+
+  <!-- ====== 1. HOME (employee) ====== -->
+  <div class="phone-wrap">
+  <div class="phone">
+    <svg class="deco tr" viewBox="0 0 200 200" fill="none">
+      <path d="M100 20 C110 60 140 70 180 80 C140 90 110 100 100 140 C90 100 60 90 20 80 C60 70 90 60 100 20Z" fill="#e8c9b9" opacity=".5"/>
+      <path d="M100 60 Q120 80 100 100 Q80 80 100 60Z" fill="#c9a36b" opacity=".4"/>
+    </svg>
+    <svg class="deco bl" viewBox="0 0 200 200" fill="none">
+      <path d="M30 100 Q70 60 110 100 Q70 140 30 100Z" fill="#d4a29c" opacity=".35"/>
+      <circle cx="120" cy="120" r="14" fill="#c9a36b" opacity=".3"/>
+    </svg>
+    <div class="screen">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="greeting-eyebrow">Доброе утро</div>
+          <div class="greeting-name">Дарина <span class="ital">Владимировна</span></div>
+        </div>
+        <div class="avatar-ring" style="width:44px;height:44px">
+          <div class="avatar" style="font-size:18px">Д</div>
+        </div>
+      </div>
+
+      <div class="card peachy pad" style="position:relative;overflow:hidden">
+        <svg style="position:absolute;right:-20px;bottom:-30px;width:160px;opacity:.4" viewBox="0 0 200 200"><circle cx="100" cy="100" r="80" fill="none" stroke="#fff" stroke-width="1"/><circle cx="100" cy="100" r="60" fill="none" stroke="#fff" stroke-width="1"/><circle cx="100" cy="100" r="40" fill="none" stroke="#fff" stroke-width="1"/></svg>
+        <div class="ring-wrap">
+          <div class="ring" style="--val:.66">
+            <div class="ring-val">32<small>часа</small></div>
+          </div>
+          <div class="hero-stat">
+            <div class="eyebrow" style="color:#7a4b43;opacity:.7">Эта неделя</div>
+            <div class="big" style="margin-top:6px">32 <span class="ital">из 48</span></div>
+            <div class="meta" style="color:#7a4b43;opacity:.8">4 дня · ещё <strong>16 ч</strong> до плана</div>
+            <div style="display:flex;gap:6px;margin-top:10px">
+              <span class="chip gold dot">в графике</span>
+              <span class="chip dot" style="background:rgba(255,255,255,.6);color:#7a4b43;border-color:rgba(122,75,67,.2)">пн – вс</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ornament">
+        <svg width="80" height="14" viewBox="0 0 80 14" fill="none">
+          <path d="M2 7 H30" stroke="currentColor" stroke-width=".8"/>
+          <path d="M50 7 H78" stroke="currentColor" stroke-width=".8"/>
+          <path d="M40 2 L43 7 L40 12 L37 7 Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="card pad-sm">
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Пн</span><span class="num">13</span></div>
+            <div class="row-times">09:00 – 17:00<span class="small">маникюр · окрашивание</span></div>
+          </div>
+          <div class="row-hours">8<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day today"><span>Вт</span><span class="num">14</span></div>
+            <div class="row-times">10:00 – 19:00<span class="small">сегодня · 4 клиента</span></div>
+          </div>
+          <div class="row-hours">9<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day empty"><span>Ср</span><span class="num">15</span></div>
+            <div class="row-empty">не отмечено</div>
+          </div>
+          <div><span class="chip gold">+ добавить</span></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Чт</span><span class="num">16</span></div>
+            <div class="row-times">11:00 – 18:30<span class="small">консультации</span></div>
+          </div>
+          <div class="row-hours">7.5<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Пт</span><span class="num">17</span></div>
+            <div class="row-times">09:00 – 16:30<span class="small">окрашивание · стрижка</span></div>
+          </div>
+          <div class="row-hours">7.5<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day empty"><span>Сб</span><span class="num">18</span></div>
+            <div class="row-empty">не отмечено</div>
+          </div>
+          <div><span class="chip gold">+ добавить</span></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day empty"><span>Вс</span><span class="num">19</span></div>
+            <div class="row-empty">выходной</div>
+          </div>
+          <div><span class="chip sage dot">отдых</span></div>
+        </div>
+      </div>
+
+      <button class="btn-primary">
+        <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Добавить смену
+      </button>
+    </div>
+  </div>
+  <div class="phone-label">главная · сотрудник</div>
+  </div>
+
+  <!-- ====== 2. SHIFT EDITOR ====== -->
+  <div class="phone-wrap">
+  <div class="phone">
+    <svg class="deco tr" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="60" fill="#e7b8b0" opacity=".4"/>
+      <circle cx="100" cy="100" r="30" fill="#c9a36b" opacity=".3"/>
+    </svg>
+    <div class="screen">
+      <div class="header-row" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div>
+            <div class="greeting-eyebrow">Вторник</div>
+            <div class="h-title">14 <span class="ital">мая</span></div>
+          </div>
+        </div>
+        <span class="chip gold">новая</span>
+      </div>
+
+      <div class="card elev pad" style="display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden">
+        <svg style="position:absolute;top:-30px;right:-30px;width:140px;opacity:.18" viewBox="0 0 100 100">
+          <path d="M50 10 Q70 30 50 50 Q30 30 50 10Z" fill="#c9a36b"/>
+          <path d="M50 50 Q70 70 50 90 Q30 70 50 50Z" fill="#c9a36b"/>
+        </svg>
+        <div>
+          <label class="field-label">Дата</label>
+          <div class="input" style="display:flex;justify-content:space-between;align-items:center">
+            <span><strong>14 мая 2026</strong><span style="color:var(--ink-soft);margin-left:8px">· вт</span></span>
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9a36b" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label class="field-label">Начало</label>
+            <div class="input" style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:'Cormorant Garamond';font-size:24px;color:var(--accent-deep);font-weight:600">10:00</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a36b" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">Конец</label>
+            <div class="input" style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-family:'Cormorant Garamond';font-size:24px;color:var(--accent-deep);font-weight:600">19:00</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9a36b" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- timeline visual -->
+        <div style="position:relative;padding-top:20px">
+          <div style="height:8px;border-radius:4px;background:linear-gradient(to right, #f5ebe2 0%, #f5ebe2 41%, #d4a29c 41%, #c9a36b 79%, #f5ebe2 79%);box-shadow:inset 0 1px 2px rgba(0,0,0,.04)"></div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ink-soft);margin-top:6px;letter-spacing:.08em">
+            <span>00</span><span>06</span><span style="color:var(--accent-deep);font-weight:600">10</span><span>14</span><span style="color:var(--accent-deep);font-weight:600">19</span><span>24</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="field-label">Заметка</label>
+          <div class="input" style="color:var(--ink)">окрашивание Лера 10:30, маникюр Марина 14:00</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="chip gold" style="font-size:13px;padding:8px 14px">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            9 часов
+          </span>
+          <span class="chip sage dot">без пересечений</span>
+        </div>
+
+        <button class="btn-primary gold">
+          Сохранить смену
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+        </button>
+      </div>
+
+      <div class="card pad-sm">
+        <div class="eyebrow" style="padding:10px 14px 6px">Смены за этот день</div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Утро</span><span class="num">10</span></div>
+            <div class="row-times">10:00 – 14:00<span class="small">маникюр Марина · окрашивание Лера</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="row-hours">4<small>ч</small></div>
+            <button style="background:transparent;border:none;color:var(--danger);cursor:pointer;padding:6px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phone-label">смена · редактор</div>
+  </div>
+
+  <!-- ====== 3. STATS ====== -->
+  <div class="phone-wrap">
+  <div class="phone">
+    <svg class="deco bl" viewBox="0 0 200 200" fill="none">
+      <path d="M40 100 Q80 40 140 80 Q100 140 40 100Z" fill="#e8c9b9" opacity=".4"/>
+      <circle cx="140" cy="80" r="12" fill="#c9a36b" opacity=".4"/>
+    </svg>
+    <div class="screen">
+      <div class="header-row">
+        <div class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div class="h-title">Стати<span class="ital">стика</span></div>
+      </div>
+
+      <div class="seg">
+        <button>Неделя</button>
+        <button class="active">Месяц</button>
+        <button>Год</button>
+      </div>
+
+      <div class="card cocoa pad" style="position:relative;overflow:hidden">
+        <svg style="position:absolute;top:-30px;right:-20px;width:160px;opacity:.12" viewBox="0 0 100 100">
+          <path d="M50 0 Q65 35 100 50 Q65 65 50 100 Q35 65 0 50 Q35 35 50 0Z" fill="#fff"/>
+        </svg>
+        <div class="eyebrow" style="color:#e6c587">— Май 2026 —</div>
+        <div style="display:flex;align-items:baseline;gap:24px;margin-top:14px">
+          <div>
+            <div style="font-family:'Cormorant Garamond';font-size:64px;color:#fff;line-height:1;font-weight:600">142<span style="color:#e6c587;font-style:italic">.5</span></div>
+            <div style="color:#e6c587;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px">часов всего</div>
+          </div>
+          <div>
+            <div style="font-family:'Cormorant Garamond';font-size:36px;color:#f6d6b8;line-height:1;font-weight:600">18 <span style="font-size:14px;color:#e6c587;font-style:italic;font-weight:500;font-family:'Inter'">дней</span></div>
+            <div style="color:#e6c587;font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px">рабочих</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:18px">
+          <div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.15);overflow:hidden">
+            <div style="width:74%;height:100%;background:linear-gradient(to right,#e6c587,#c9a36b);border-radius:3px"></div>
+          </div>
+          <span style="color:#e6c587;font-size:12px;font-weight:600">+12% к апрелю</span>
+        </div>
+      </div>
+
+      <div class="card pad" style="padding-bottom:14px">
+        <div class="eyebrow">Часы по дням</div>
+        <div class="barchart" style="margin-top:8px">
+          <div class="bar" style="height:55%"></div>
+          <div class="bar gold" style="height:62%"></div>
+          <div class="bar faint" style="height:10%"></div>
+          <div class="bar" style="height:52%"></div>
+          <div class="bar gold" style="height:78%"></div>
+          <div class="bar cocoa" style="height:90%"></div>
+          <div class="bar faint" style="height:10%"></div>
+          <div class="bar" style="height:55%"></div>
+          <div class="bar gold" style="height:62%"></div>
+          <div class="bar" style="height:50%"></div>
+          <div class="bar faint" style="height:10%"></div>
+          <div class="bar gold" style="height:68%"></div>
+          <div class="bar" style="height:55%"></div>
+          <div class="bar cocoa" style="height:88%"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--ink-soft);margin-top:8px;letter-spacing:.06em">
+          <span>1</span><span>4</span><span>7</span><span>10</span><span>14</span><span>17</span><span>21</span><span>24</span><span>28</span><span>31</span>
+        </div>
+      </div>
+
+      <div class="card pad-sm">
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Вт</span><span class="num">13</span></div>
+            <div class="row-times">09:00 – 17:00</div>
+          </div>
+          <div class="row-hours">8<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Ср</span><span class="num">14</span></div>
+            <div class="row-times">10:00 – 19:00</div>
+          </div>
+          <div class="row-hours">9<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Пт</span><span class="num">16</span></div>
+            <div class="row-times">11:00 – 18:30</div>
+          </div>
+          <div class="row-hours">7.5<small>ч</small></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Сб</span><span class="num">17</span></div>
+            <div class="row-times">09:00 – 16:30</div>
+          </div>
+          <div class="row-hours">7.5<small>ч</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phone-label">статистика · сводки</div>
+  </div>
+
+  <!-- ====== 4. ADMIN LIST ====== -->
+  <div class="phone-wrap">
+  <div class="phone">
+    <svg class="deco tr" viewBox="0 0 200 200" fill="none">
+      <path d="M100 30 Q140 80 100 130 Q60 80 100 30Z" fill="#d4a29c" opacity=".4"/>
+      <circle cx="100" cy="80" r="8" fill="#c9a36b" opacity=".5"/>
+    </svg>
+    <div class="screen">
+      <div class="header-row" style="justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="back">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div>
+            <div class="greeting-eyebrow">Студия</div>
+            <div class="h-title">Сотруд<span class="ital">ники</span></div>
+          </div>
+        </div>
+        <span class="chip gold">5 человек</span>
+      </div>
+
+      <div class="card peachy pad" style="padding:16px 18px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div class="eyebrow" style="color:#7a4b43;opacity:.6">Студия · май</div>
+            <div style="font-family:'Cormorant Garamond';font-size:32px;color:#7a4b43;font-weight:600;margin-top:2px">510 <span style="font-style:italic;color:#b88d4d">часов</span></div>
+          </div>
+          <svg class="spark" style="width:120px" viewBox="0 0 120 56" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#7a4b43" stop-opacity=".5"/>
+                <stop offset="1" stop-color="#7a4b43" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0 40 L15 30 L30 36 L45 22 L60 26 L75 14 L90 20 L105 8 L120 16 L120 56 L0 56 Z" fill="url(#sg)"/>
+            <path d="M0 40 L15 30 L30 36 L45 22 L60 26 L75 14 L90 20 L105 8 L120 16" stroke="#7a4b43" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card pad-sm">
+        <div class="user-line">
+          <div class="avatar-ring"><div class="avatar">Д</div></div>
+          <div style="flex:1">
+            <div class="user-name">Дарина Владимировна <span class="chip gold" style="font-size:9px;padding:2px 8px">топ-стилист</span></div>
+            <div class="user-meta">142.5 ч <span class="dot"></span> 18 дн в мае</div>
+          </div>
+          <div class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="user-line">
+          <div class="avatar-ring" style="background:linear-gradient(135deg,#7a4b43,#c9a36b)"><div class="avatar" style="background:#fff5ee">М</div></div>
+          <div style="flex:1">
+            <div class="user-name">Марина Лозовая <span class="chip" style="font-size:9px;padding:2px 8px;background:#7a4b43;color:#fff;border:none">admin</span></div>
+            <div class="user-meta">96 ч <span class="dot"></span> 12 дн в мае</div>
+          </div>
+          <div class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="user-line">
+          <div class="avatar-ring" style="background:linear-gradient(135deg,#a8b89a,#e8c9b9)"><div class="avatar">К</div></div>
+          <div style="flex:1">
+            <div class="user-name">Катя Ким</div>
+            <div class="user-meta">88 ч <span class="dot"></span> 11 дн в мае</div>
+          </div>
+          <div class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="user-line">
+          <div class="avatar-ring"><div class="avatar">Л</div></div>
+          <div style="flex:1">
+            <div class="user-name">Лера Орлова</div>
+            <div class="user-meta">120 ч <span class="dot"></span> 15 дн в мае</div>
+          </div>
+          <div class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="hairline"></div>
+        <div class="user-line">
+          <div class="avatar-ring" style="background:linear-gradient(135deg,#e7b8b0,#c9a36b)"><div class="avatar">Н</div></div>
+          <div style="flex:1">
+            <div class="user-name">Настя Беляева <span class="chip sage" style="font-size:9px;padding:2px 8px">новенькая</span></div>
+            <div class="user-meta">64 ч <span class="dot"></span> 8 дн в мае</div>
+          </div>
+          <div class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="phone-label">админ · сотрудники</div>
+  </div>
+
+  <!-- ====== 5. ADMIN USER DETAIL ====== -->
+  <div class="phone-wrap">
+  <div class="phone">
+    <svg class="deco tr" viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="70" fill="#e8c9b9" opacity=".4"/>
+      <path d="M70 100 Q100 70 130 100 Q100 130 70 100Z" fill="#c9a36b" opacity=".35"/>
+    </svg>
+    <div class="screen">
+      <div class="header-row">
+        <div class="back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar-ring" style="width:46px;height:46px"><div class="avatar" style="font-size:20px">Д</div></div>
+          <div>
+            <div class="greeting-eyebrow">Топ-стилист</div>
+            <div class="h-title">Дарина <span class="ital">В.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg">
+        <button class="active">Неделя</button>
+        <button>Месяц</button>
+      </div>
+
+      <div class="card peachy pad" style="position:relative;overflow:hidden">
+        <svg style="position:absolute;right:-30px;top:-20px;width:160px;opacity:.3" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" fill="none" stroke="#7a4b43" stroke-width=".5"/>
+          <circle cx="50" cy="50" r="30" fill="none" stroke="#7a4b43" stroke-width=".5"/>
+        </svg>
+        <div class="ring-wrap">
+          <div class="ring" style="--val:.66">
+            <div class="ring-val">32<small>ч</small></div>
+          </div>
+          <div class="hero-stat">
+            <div class="eyebrow" style="color:#7a4b43;opacity:.7">Итого за неделю</div>
+            <div class="big" style="margin-top:6px">32<span class="ital"> ч</span></div>
+            <div class="meta" style="color:#7a4b43;opacity:.85">4 дня · средняя смена 8 ч</div>
+            <div style="display:flex;gap:6px;margin-top:8px">
+              <span class="chip gold dot">+2 ч к прошлой</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card pad-sm">
+        <div class="eyebrow" style="padding:10px 14px 4px">Смены</div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Пн</span><span class="num">13</span></div>
+            <div class="row-times">09:00 – 17:00<span class="small">маникюр · окрашивание</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="row-hours">8<small>ч</small></div>
+            <button style="background:transparent;border:none;color:var(--danger);cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day today"><span>Вт</span><span class="num">14</span></div>
+            <div class="row-times">10:00 – 19:00<span class="small">окрашивание Лера, маникюр Марина</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="row-hours">9<small>ч</small></div>
+            <button style="background:transparent;border:none;color:var(--danger);cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Чт</span><span class="num">16</span></div>
+            <div class="row-times">11:00 – 18:30<span class="small">консультации</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="row-hours">7.5<small>ч</small></div>
+            <button style="background:transparent;border:none;color:var(--danger);cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="hairline"></div>
+        <div class="row">
+          <div class="row-left">
+            <div class="day"><span>Пт</span><span class="num">17</span></div>
+            <div class="row-times">09:00 – 16:30<span class="small">стрижка · уход</span></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="row-hours">7.5<small>ч</small></div>
+            <button style="background:transparent;border:none;color:var(--danger);cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ornament">
+        <svg width="80" height="14" viewBox="0 0 80 14" fill="none">
+          <path d="M2 7 H30" stroke="currentColor" stroke-width=".8"/>
+          <path d="M50 7 H78" stroke="currentColor" stroke-width=".8"/>
+          <path d="M40 2 L43 7 L40 12 L37 7 Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="grid-2">
+        <button class="btn-soft">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Добавить
+        </button>
+        <button class="btn-soft">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+          Все периоды
+        </button>
+      </div>
+
+      <div class="grid-2">
+        <button class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Excel
+        </button>
+        <button class="btn-primary gold">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          PDF
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="phone-label">админ · детали + экспорт</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="accent">Cormorant Garamond × Inter</div>
+  скругления 16–22 px · золотые акценты · мягкие тени · ботанические мотивы
+</div>
+
+</body>
+</html>
